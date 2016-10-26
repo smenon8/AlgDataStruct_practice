@@ -22,6 +22,7 @@ def twoSumProbHashMapMeth(arr,sum):
 	for ele in valMap.keys():
 		if valMap[ele] in valMap.keys():
 			print(ele)
+			
 def twoSumProbSortMeth(arr,sum):
 	arr.sort()
 

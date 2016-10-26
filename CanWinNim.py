@@ -8,6 +8,3 @@ def canWinNim(n):
         return canWinNim(n-3) or canWinNim(n-2) or canWinNim(n-1)
 
 print(canWinNim(11))
-
-def randomPairwiseSet(orig,pairSum):
-	
