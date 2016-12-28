@@ -100,3 +100,17 @@ def minWaysCoinChng(V,C):
 		return memoTab[V]
 
 print(minWaysCoinChng(11,[9,6,5,1]))
+
+def largSumContSubArr(arr):
+	n = len(arr)
+	sumSoFar,sumTillHere = arr[0],arr[1]
+
+	for i in range(1,n):
+		sumTillHere += arr[i]
+		if sumTillHere < 0:
+			sumTillHere = 0
+		if sumSoFar < sumTillHere:
+			sumSoFar = sumTillHere
+	return sumSoFar
+
+print(largSumContSubArr([-2, -3, 4, -1, -2, 1, 5, -3]))

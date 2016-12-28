@@ -9,18 +9,21 @@ class Tree:
 		self.root = None
 
 # functions for tree traversal
+# in-order traversal - the natural order, left to right via root
 def inOrderTraversal(root):
 	if root != None:
 		inOrderTraversal(root.left)
 		print(root.value)
 		inOrderTraversal(root.right)
 
+# pre-order traversal - the order where root is given pre-dominance
 def preOrderTraversal(root):
 	if root != None:
 		print(root.value)
 		preOrderTraversal(root.left)
 		preOrderTraversal(root.right)
 
+# pre-order traversal - the order where root is given last priority, children first
 def postOrderTraversal(root):
 	if root != None:
 		preOrderTraversal(root.left)
@@ -34,6 +37,24 @@ def RecDFS(root): # Same as the logic for pre-order. Thus can be done using Stac
 		print(root.value)
 		RecDFS(root.left)
 		RecDFS(root.right)
+
+# DFS using stacks
+def NonRecDFS(root):
+	if root == None:
+		return 
+	else:
+		stck = []
+		stck.append(root)
+		while len(stck) != 0:
+			curr = stck.pop()
+			if curr.right != None:
+				stck.append(curr.right)
+
+			if curr.left != None:
+				stck.append(curr.left)
+			
+			print(curr.value)
+		return
 
 def BFSUsingQ(root):
 	queue = []
@@ -82,6 +103,30 @@ def inOrderTraversalUsingStack(root):
 			stack,curr = pop(stack)
 			print(curr.value)
 			curr = curr.right	
+
+def printLevelK(root, k):
+	if root == None:
+		return 
+	else:
+		q = [root]
+		level = 1
+		while level != k and len(q) != 0:
+			level += 1
+			currLvlNodes = []
+
+			while len(q) != 0:
+				currLvlNodes.append(q.pop())
+
+			for node in currLvlNodes:
+				if node.left != None:
+					q.append(node.left)
+				if node.right != None:
+					q.append(node.right)
+
+		for node in q:
+			print(node.value)
+
+		return
 
 # this function will return a tree given pre-order and in-order traversal
 def ConstructTreeInPre(inOrder,preOrder,inStart,inEnd):
@@ -177,6 +222,11 @@ t1.root.left = NodeT(2)
 t1.root.right = NodeT(3)
 t1.root.left.left = NodeT(4)
 t1.root.left.right = NodeT(5)
+t1.root.right.left = NodeT(6)
+t1.root.right.right = NodeT(7)
+t1.root.left.left.left = NodeT(8)
+t1.root.right.left.left = NodeT(9)
+t1.root.right.left.right = NodeT(10)
 
 
 print("In order traversal")
