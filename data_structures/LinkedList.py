@@ -86,7 +86,27 @@ class LinkedList:
 			curr.next = prev
 			prev = curr
 			curr = temp
+
 		self.head = prev
+
+
+	def reverseLL_rec_util(self, curr, prev):
+		if curr.next == None: # this is the last node
+			self.head = curr
+			curr.next = prev
+			return 
+		else:
+			next = curr.next
+			curr.next = prev
+
+			self.reverseLL_rec_util(next, curr)
+
+
+	def reverseLinkedList_rec(self):
+		if self.head == None:
+			return 
+		else:
+			self.reverseLL_rec_util(self.head, None)
 		
 def createFreshLL():		
 	ll = LinkedList()

@@ -58,7 +58,6 @@ class NodeST:
 class BinSearchTree:
 	def __init__(self):
 		self.root = None
-		self.prev = None
 
 	def searchEle(self,val):
 		curr = self.root
@@ -136,6 +135,18 @@ def inOrderTraversalMod(root,lst):
 		inOrderTraversalMod(root.left,lst)
 		lst.append(root.key)
 		inOrderTraversalMod(root.right,lst)
+
+def isBST_rec(root):
+	if root == None:
+		return True
+
+	if root.left == None and root.right == None:
+		return True
+	else:
+		if (root.left and root.key > root.left.key) or (root.right and root.key < root.right.key):
+			return isBST_rec(root.left) and isBST_rec(root.right)
+		else:
+			return False
 
 def isBST(root):
 	lst = []

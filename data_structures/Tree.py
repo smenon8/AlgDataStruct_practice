@@ -1,3 +1,4 @@
+ #!/usr/local/bin/python
 class NodeT:
 	def __init__(self,value):
 		self.left = None
@@ -22,6 +23,30 @@ def preOrderTraversal(root):
 		print(root.value)
 		preOrderTraversal(root.left)
 		preOrderTraversal(root.right)
+
+def preOrderTraversalNonRec(root):
+	if root == None:
+		return 
+	curr = root
+	stack = []
+	
+	
+	while curr != None  or len(stack) != 0:	
+		while curr != None:
+			stack.append(curr)
+			curr = curr.left
+
+	'''
+		the while loop will be exited when there are no more left children
+		in that case pop the stack, print it and then look in its right child
+	'''
+	
+		if curr == None and len(stack) != 0:
+			curr = stack.pop()
+			print(curr.value)
+			curr = curr.right 
+		
+
 
 # pre-order traversal - the order where root is given last priority, children first
 def postOrderTraversal(root):
@@ -79,6 +104,31 @@ def heightFrom(node):
 	else:
 		return 1 + max(heightFrom(node.left),heightFrom(node.right))
 
+def diameter(root):
+	# root case: empty tree - 0 diameter
+	if root == None:
+		return 0
+	else:
+		''' 
+		Case 1: 
+			diameter forming node path passes through the root node.
+			In that case the diameter = height(left sub tree) + height (right sub tree)
+		'''
+		lHeight = heightFrom(root.left)
+		rHeight = heightFrom(root.right)
+
+		'''
+		Case 2: 
+			Diameter forming nodes might not necessarily pass through the root nodes.
+			In that case, for every left and right node, the diameter has to be calculated
+		'''
+		lDiameter = diameter(root.left)
+		rDiameter = diameter(root.right)
+
+		# Finally, the diameter would be either lDiameter, rDiameter or lHeight + rHeight + 1
+		return max(lHeight+rHeight+1, lDiameter, rDiameter)
+
+
 # stack methods - note, these method are built in for lists
 def push(arr,num):
 	arr.append(num)
@@ -103,6 +153,22 @@ def inOrderTraversalUsingStack(root):
 			stack,curr = pop(stack)
 			print(curr.value)
 			curr = curr.right	
+
+def level_order_traversal(root):
+	q = [root]
+	while len(q) != 0:
+		curr_lvl = [i for i in q]
+		q = []
+		for node in curr_lvl:
+			if node.left != None:
+				q.append(node.left)
+			if node.right != None:
+				q.append(node.right)
+				
+		for node in curr_lvl:
+			print(node.value,end=" ")
+		print()
+	return None
 
 def printLevelK(root, k):
 	if root == None:

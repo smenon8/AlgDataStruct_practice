@@ -1,3 +1,4 @@
+#! /usr/bin/python3
 # LCS using dynamic programming recursive method
 def lcsRecursion(seq1,seq2,m,n):
 	if m == 0 or n == 0:
@@ -114,3 +115,36 @@ def largSumContSubArr(arr):
 	return sumSoFar
 
 print(largSumContSubArr([-2, -3, 4, -1, -2, 1, 5, -3]))
+
+
+def longest_palindromic_subseq(strng, start, end):
+	if start == end:
+		return 1
+	
+	'''
+		How is this one of the base cases: When the string length is 2 and say it is a palindrome, 
+	 	then there are chances that start and end are going to cross each other 
+	 '''
+	if strng[start] == strng[end] and start + 1 == end: 
+		return 2
+
+	# If the start and end are going to be same then the seq length can be increased by 2
+	if strng[start] == strng[end]:
+		return longest_palindromic_subseq(strng, start+1, end-1) + 2
+	
+	# This is in case of a mismatch
+	return max(longest_palindromic_subseq(strng, start, end-1), longest_palindromic_subseq(strng, start+1, end))
+
+def longest_palindromic_subseq_dp(strng):
+	rev_strng = strng[::-1]
+
+	return LCSIter(strng, rev_strng)
+
+
+
+s = "GEEKSFORGEEKS"
+print(s)
+print(longest_palindromic_subseq(s,0,len(s)-1))
+print(longest_palindromic_subseq_dp(s))
+
+
