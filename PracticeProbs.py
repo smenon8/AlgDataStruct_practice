@@ -144,6 +144,57 @@ def find_missing_num(arr, N):
 
 	return xor1 ^ xor2
 
+def two_pair_sum(arr, n):
+	dct = {n - arr[i] : arr[i] for i in range(len(arr))}
+	results = []
+	for i in range(len(arr)):
+		if arr[i] in dct.keys():
+			results.append((arr[i], dct[arr[i]]))
+
+	return results
+
+def find_num_paths(arr_2D, i, j):
+	# i,j is the start point and you have to travel all the way back to 0,0
+	if i == j and i == 0:
+		return 1
+
+	if i < 0 or j < 0 or arr_2D[i][j] == 0: # out of range or no path from that point
+		return 0
+
+	if arr_2D[i][j] == 1:
+		return find_num_paths(arr_2D, i, j-1) + find_num_paths(arr_2D, i-1, j) + find_num_paths(arr_2D, i-1, j-1) 
+
+'''
+Given a sorted array of integers, using the same array, shuffle the integers to have unique elements and return the index. 
+
+Sample input : [3, 3, 4, 5, 5, 6, 7, 7, 7] 
+Sample output : [3, 4, 5, 6, 7, X, X, X, X] 
+In this case, it returns an index of 4. 
+The elements in the array after that index is negligible (don't care what value it is).
+
+'''
+def max_index_uniq_arr(arr):
+	# using the concept of lazy index
+	j = 0
+	for i in range(1,len(arr)):
+		if arr[i] != arr[i-1]:
+			j += 1
+
+	return j
+
+def longest_run(strng):
+	start = end = l_start = l_end = 0
+	for i in range(1,len(strng)):
+		if strng[i-1] == strng[i]:
+			end = i
+			if end - start > l_end - l_start:
+				l_start = start
+				l_end = end
+		else:
+			start = end = i
+
+	return ''.join(strng[l_start:l_end+1])
+
 
 print(power_set([1,2,3]))
 print(power_set2([1,2,3], []))
@@ -151,5 +202,12 @@ print(power_set3([1,2,3]))
 
 print(zeros_to_end([1,3,0,8,12,0,4,7,0,0,0,0,9,12,14,15,0,0]))
 
-
 print(find_missing_num([1,2,4,5,6],6))
+
+
+print("Find missing paths")
+arr_2D = [[1,1],[1,1]]
+print(find_num_paths(arr_2D, 1, 1))
+
+arr = [3, 3, 4, 5, 5, 6, 7, 7, 7] 
+print(max_index_uniq_arr(arr))

@@ -17,6 +17,20 @@ def inOrderTraversal(root):
 		print(root.value)
 		inOrderTraversal(root.right)
 
+# in-order traversal - returning list
+def _inorderTraversal(root, l):
+	if root == None:
+		return 
+        
+	_inorderTraversal(root.left, l)
+	l.append(root)
+	_inorderTraversal(root.right, l)
+    
+def inorderTraversal(root):
+	soln = []
+	_inorderTraversal(root,soln)
+	return soln
+
 # pre-order traversal - the order where root is given pre-dominance
 def preOrderTraversal(root):
 	if root != None:
@@ -46,7 +60,23 @@ def preOrderTraversalNonRec(root):
 			print(curr.value)
 			curr = curr.right 
 		
+# constructing tree from pre and in order
 
+def construct_tree(in_order_arr, pre_order_arr, in_start, in_end):
+	if in_start > in_end:
+		return 
+
+	tNode = NodeT(pre_order_arr[global_pre_index])
+	global_pre_index += 1
+
+	if in_start == in_end:
+		return tNode
+
+	root_index_in_order = in_order_arr.index(tNode.val)
+	left_index = construct_tree(in_order_arr, pre_order_arr, in_start, root_index_in_order-1)
+	right_index = construct_tree(in_order_arr, pre_order_arr, root_index_in_order+1, in_end)
+
+	return tNode
 
 # pre-order traversal - the order where root is given last priority, children first
 def postOrderTraversal(root):
@@ -170,6 +200,23 @@ def level_order_traversal(root):
 		print()
 	return None
 
+def lvl_ordr_trav(root):
+	if root == None:
+		return
+	res = []
+	q = [root]
+	while len(q) > 0:
+		ele = q.pop(0)
+		print(ele.value)
+		res.append(ele)
+		if ele.left:
+			q.append(ele.left)
+		if ele.right:
+			q.append(ele.right)
+	return res
+
+
+
 def printLevelK(root, k):
 	if root == None:
 		return 
@@ -193,6 +240,17 @@ def printLevelK(root, k):
 			print(node.value)
 
 		return
+
+def nodesAtDistK(root, k):
+	if not root:
+		return
+
+	if k == 0: # destination reached
+		print(root.value)
+
+	# k > 0
+	nodesAtDistK(root.left, k-1)
+	nodesAtDistK(root.right, k-1)
 
 # this function will return a tree given pre-order and in-order traversal
 def ConstructTreeInPre(inOrder,preOrder,inStart,inEnd):
