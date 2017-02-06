@@ -5,6 +5,13 @@ class NodeT:
 		self.right = None
 		self.value = value
 
+class SpecialTNode:
+	def __init__(self,value):
+		self.left = None
+		self.right = None
+		self.value = value
+		self.nextRight = None
+
 class Tree:
 	def __init__(self):
 		self.root = None
@@ -184,23 +191,22 @@ def inOrderTraversalUsingStack(root):
 			print(curr.value)
 			curr = curr.right	
 
-def level_order_traversal(root):
-	q = [root]
-	while len(q) != 0:
-		curr_lvl = [i for i in q]
-		q = []
-		for node in curr_lvl:
-			if node.left != None:
-				q.append(node.left)
-			if node.right != None:
-				q.append(node.right)
-				
-		for node in curr_lvl:
-			print(node.value,end=" ")
-		print()
-	return None
+def lvl_ordr_trav_new_line(root):
+	curr_lvl = [root]
+	nxt_lvl = []
 
-def lvl_ordr_trav(root):
+	while len(curr_lvl) != 0:
+		for node in curr_lvl:
+			if node.left: 
+				nxt_lvl.append(node.left)
+			if node.right:
+				nxt_lvl.append(node.right)
+			print(node.value, end=" ")
+		print()
+		curr_lvl = nxt_lvl
+		nxt_lvl = []
+
+def lvl_ordr_trav_same_line(root):
 	if root == None:
 		return
 	res = []
@@ -336,6 +342,30 @@ def printAncestors(root,ele):
 			print(root.value)
 			return True
 
+
+def connectNodesSameLvl(root):
+	if not root:
+		return 
+
+	curr_lvl = [root]
+	nxt_lvl = []
+
+	while len(curr_lvl) != 0:
+		# loop 1: For enqueing the next level children to nxt_lvl
+		for node in curr_lvl:
+			if node.left:
+				nxt_lvl.append(node.left)
+			if node.right:
+				nxt_lvl.append(node.right)
+
+		# loop 2: Actual connections
+		for i in range(1,len(curr_lvl)):
+			curr_lvl[i-1].nextRight = curr_lvl[i]
+
+		# make nxt_lvl curr_lvl
+		curr_lvl = nxt_lvl 
+		nxt_lvl = []
+		
 
 ## TEST DRIVER ####################
 
