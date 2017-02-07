@@ -380,6 +380,25 @@ def btree_to_bst(root):
 
 	_btree_to_bst(root, in_order_arr)
 
+
+def sum_tree(root):
+	if not root:
+		return 0
+	else:
+		return root.value + sum_tree(root.left) + sum_tree(root.right)
+
+def tree_trimmer(root, h):
+	if root == None:
+		return root
+
+	if h == 0:
+		root.value = sum_tree(root)
+		root.left = root.right = None
+
+	tree_trimmer(root.left, h-1)
+	tree_trimmer(root.right, h-1)
+	
+
 ## TEST DRIVER ####################
 
 t1 = Tree()
