@@ -136,17 +136,17 @@ def inOrderTraversalMod(root,lst):
 		lst.append(root.key)
 		inOrderTraversalMod(root.right,lst)
 
-def isBST_rec(root):
+def _isBST_rec(root, min_val, max_val):
 	if root == None:
 		return True
 
-	if root.left == None and root.right == None:
-		return True
+	if root.key >= min_val and root.key <= max_val:
+		return _isBST_rec(root.left, min_val, root.key - 1) and _isBST_rec(root.right, root.key + 1, max_val)
 	else:
-		if (root.left and root.key > root.left.key) or (root.right and root.key < root.right.key):
-			return isBST_rec(root.left) and isBST_rec(root.right)
-		else:
-			return False
+		return False
+
+def isBST_rec(root):
+	return _isBST_rec(root, -float('inf'), float('inf'))
 
 def isBST(root):
 	lst = []
@@ -202,6 +202,17 @@ def lowCommonAncestor(root,val1,val2): # assumption val1 and val2 both exist and
 	
 	return root
 
+def low_common_ancestor_non_rec(root, val1, val2):
+	curr = root
+	while curr:
+		if val1 <= curr.key <= val2:
+			return curr.key 
+		elif val1 < curr.key and val2 < curr.key:
+			curr = curr.left
+		elif val1 > curr.key and val2 > curr.key:
+			curr = curr.right
+
+	return None
 
 def buildBSTFromSortedArr(arr):
 	if len(arr) == 0:
@@ -215,6 +226,23 @@ def buildBSTFromSortedArr(arr):
 	
 	return root
 
+def correct_BST(root):
+	in_order_arr = []
+	inOrderTraversalMod(root, in_order_arr)
+
+	for i in range(len(in_order_arr)-1, 1, -1):
+		if in_order_arr[i] < in_order_arr[i-1]:
+			first = i-1
+
+	for i in range(len(in_order_arr)-1):
+		if in_order_arr[i] > in_order_arr[i+1]:
+			second = i+1
+
+	in_order_arr[first], in_order_arr[second] = in_order_arr[second], in_order_arr[first]
+
+	root = buildBSTFromSortedArr(in_order_arr)
+
+	return root
 
 def ceilFromBST(root,arg):
 	if root == None:
@@ -272,6 +300,23 @@ def in_order_succ(root, node):
 				break
 
 		return succ.key
+		
+# exact converse of in-order predecessor
+def in_order_predec(root, node):
+	if node.left:
+		return findMaxEle(node.left)
+	else:
+		curr = root
+		while curr:
+			if curr.key > node.key:
+				curr = curr.left
+			elif curr.key < node.key:
+				predec = curr
+				curr = curr.right
+			else:
+				break
+		return predec.key
+
 		
 ## TEST DRIVER #############
 bst = BinSearchTree()

@@ -366,6 +366,19 @@ def connectNodesSameLvl(root):
 		curr_lvl = nxt_lvl 
 		nxt_lvl = []
 		
+def _btree_to_bst(root, in_order_arr):
+	if not root:
+		return
+
+	_btree_to_bst(root.left, in_order_arr)
+	root = in_order_arr.pop(0)
+	_btree_to_bst(root.right, in_order_arr)	
+
+def btree_to_bst(root):
+	in_order_arr = inorderTraversal(root)
+	in_order_arr = sorted(in_order_arr, key = lambda x : x.value)
+
+	_btree_to_bst(root, in_order_arr)
 
 ## TEST DRIVER ####################
 
