@@ -257,6 +257,22 @@ def levelOrderTraversal(root):
 
 		print()
 
+def in_order_succ(root, node):
+	if node.right: # if node has a right child, then it simply means the succ is in the right sub-tree 
+		return findMinEle(node.right)	
+	else:
+		curr = root
+		while curr:
+			if curr.key > node.key: # chances that the successor lies in the left of the curr node
+				succ = curr
+				curr = curr.left
+			elif curr.key < node.key : # the successor lies in the right of the curr-node
+				curr = curr.right
+			else:
+				break
+
+		return succ.key
+		
 ## TEST DRIVER #############
 bst = BinSearchTree()
 
