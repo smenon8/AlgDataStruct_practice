@@ -23,92 +23,137 @@ class Queue:
 		print("Current contents of the queue:")
 		return str(self.queue[self.head:self.tail])
 
-class Node:
-	def __init__(self,value):
+
+class G_node:
+	def __init__(self, value):
 		self.value = value
-		self.next = None
+		self.adjacents = []
+
+	def add_adjacents(self, *adj_nodes):
+		self.adjacents = list(adj_nodes)
 
 	def __repr__(self):
-		return str(self.__dict__)
+		return str(self.value)
 
 class Graph:
 	def __init__(self):
-		self.adjList = []
+		self.node_list = []
 
-	def createNewNode(self,value):
-		node = Node(value)
-		self.adjList.append(node)
+	def add_node(self, node):
+		self.node_list.append(node)
 
-	def addEdge(self,fromVal,toVal):
-		for i in range(len(self.adjList)):
-			if fromVal == self.adjList[i].value:
-				fromInd = i
+	def print_graph(self):
+		for node in self.node_list:
+			print("%s ->" %node, end = " ")
+			print(node.adjacents)	
 
-		curr = self.adjList[fromInd]
-		while curr.next != None:
-			curr = curr.next
-		curr.next = Node(toVal)
+	def get_num_nodes(self):
+		return len(self.node_list)
 
-	def printNodes(self):
-		for i in range(len(self.adjList)):
-			curr = self.adjList[i]
-			while(curr != None):
-				print(str(curr.value) + "-->",end='')
-				curr = curr.next
-			print()
-
-	def searchNode(self,val):
-		for i in range(len(self.adjList)):
-			if self.adjList[i].value == val:
+	def get_index_node_list(self, node):
+		for i in range(len(self.node_list)):
+			if self.node_list[i] == node:
 				return i
-		return None
 
-def BreadthFirstSearch(g,start):
-	visited = [False]*len(g.adjList)
+def _dfs_helper(G, start_node_idx, visited):
+	visited[start_node_idx] = True # 
+	start_node = G.node_list[start_node_idx]
+	print(start_node,end="->")
+
+	for node in start_node.adjacents:
+		idx = G.get_index_node_list(node)
+		
+		if not visited[idx]: # if not visited, the mark visited and start scanning its adjacents
+			visited[idx] = True
+			_dfs_helper(G, idx, visited)
+
+# the possible modification to this code you can make is to actually do the search! 
+def depth_first_search(G, start_node_idx):
+	visited = [False] * G.get_num_nodes()
+
+	_dfs_helper(G, start_node_idx, visited)
+
+def breadth_first_search(G, start_node_idx):
 	q = Queue()
-	indexStart = g.searchNode(start)
 
-	curr = g.adjList[indexStart]
-	q.enqueue(curr)
+	visited = [False] * G.get_num_nodes()
+	start_node = G.node_list[start_node_idx]
+	visited[start_node_idx] = True
+	q.enqueue(start_node)
+
 	while not q.isEmpty():
-		curr = q.dequeue() # dequeue the first element, will be printed and marked visited
+		node = q.dequeue()
+		print(node,end="->")
+		for adj in node.adjacents:
+			adj_idx = G.get_index_node_list(adj)
+			if not visited[adj_idx]:
+				visited[adj_idx] = True
+				q.enqueue(adj)
 
-		index = g.searchNode(curr.value) # search where the first element is in the adjacency list
-		curr = g.adjList[index]
-		
-		if not visited[index]: # check if visited, if not print the value of the current node
-			visited[index] = True
-			print(curr.value)
-		
-		curr = curr.next
-		
-		while curr != None:
-			q.enqueue(curr) # enqueue all children of current node
-			curr = curr.next
+def __main__():
+	G = Graph()
+
+	a = G_node('a')
+	b = G_node('b')
+	c = G_node('c')
+	d = G_node('d')
+	e = G_node('e')
+	f = G_node('f')
+	g = G_node('g')
+	h = G_node('h')
+	i = G_node('i')
+	j = G_node('j')
+	k = G_node('k')
+
+	a.add_adjacents(b,c)
+	b.add_adjacents(c)
+	c.add_adjacents(g,e,f)
+	d.add_adjacents(e)
+	e.add_adjacents(d,i,j)
+	# f.add_adjacents()
+	g.add_adjacents(f,a)
+	h.add_adjacents(g,j,k)
+	i.add_adjacents(j)
+	j.add_adjacents(k)
+	# k.add_adjacents()
 
 
-g = Graph()
+	G.add_node(a)
+	G.add_node(b)
+	G.add_node(c)
+	G.add_node(d)
+	G.add_node(e)
+	G.add_node(f)
+	G.add_node(g)
+	G.add_node(h)
+	G.add_node(i)
+	G.add_node(j)
+	G.add_node(k)
 
-g.createNewNode(1)
-g.createNewNode(2)
-g.createNewNode(3)
-g.createNewNode(4)
-g.createNewNode(5)
-g.createNewNode(6)
-g.createNewNode(7)
-g.createNewNode(8)
+	print(G.node_list)
 
-g.addEdge(1,4)
-g.addEdge(1,2)
-g.addEdge(2,3)
-g.addEdge(3,6)
-g.addEdge(6,7)
-g.addEdge(7,8)
-g.addEdge(4,5)
-g.addEdge(5,7)
-g.addEdge(3,4)
-g.addEdge(4,3)
-g.printNodes()
+	G.print_graph()
 
-print("Breadth First Search output")
-BreadthFirstSearch(g,1)
+	depth_first_search(G, 0)
+	print()
+	breadth_first_search(G, 0)
+	print()
+
+	# print(G.get_index_node_list(g))
+'''
+Graph Structure as follows:
+a -> [b, c]
+b -> [c]
+c -> [g, e]
+d -> [e]
+e -> [d, i, j]
+f -> []
+g -> [f, a]
+h -> [g, j, k]
+i -> [j]
+j -> [k]
+k -> []
+'''
+
+if __name__ == "__main__":
+	__main__()

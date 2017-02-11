@@ -195,6 +195,25 @@ def longest_run(strng):
 
 	return ''.join(strng[l_start:l_end+1])
 
+def get_max_index(arr):
+	max_idx = 0
+	for i in range(1, len(arr)):
+		if arr[max_idx] < arr[i]:
+			max_idx = i
+
+	return max_idx
+
+def top_k_ele(arr, k):
+	temp = arr[:k]
+	for i in range(k):
+		max_idx = get_max_index(temp)
+
+		for j in range(k, len(arr)):
+			if temp[max_idx] > arr[j]:
+				temp[max_idx] = arr[j]
+				print(temp)
+				break
+	return temp
 
 print(power_set([1,2,3]))
 print(power_set2([1,2,3], []))
