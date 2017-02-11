@@ -399,6 +399,26 @@ def tree_trimmer(root, h):
 	tree_trimmer(root.right, h-1)
 	
 
+def is_balanced(root): # worst case complexity - when the tree is actually balanced will be O(n^2)
+	if root == None:
+		return True
+
+	if abs(heightFrom(root.left) - heightFrom(root.right)) <= 1:
+		return is_balanced(root.left) and is_balanced(root.right)
+	else:
+		return False
+
+def is_balanced_optimized(root, height):
+	if root == None:
+		return height
+
+	height_l = is_balanced_optimized(root.left, height+1)
+	height_r = is_balanced_optimized(root.right, height+1)
+
+	if abs(height_l - height_r) <= 1:
+		return True
+	else:
+		return False
 ## TEST DRIVER ####################
 
 t1 = Tree()

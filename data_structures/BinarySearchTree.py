@@ -136,6 +136,9 @@ def inOrderTraversalMod(root,lst):
 		lst.append(root.key)
 		inOrderTraversalMod(root.right,lst)
 
+# Major assumption: We assume that the tree will only have unique values, a tree can have only its left child <= root node. 
+# the logic here is to check recursively, if the sub-trees all have their values within the range. 
+# The root node should have values between the min_val and max_val. You start with -inf and +inf for the root node. 
 def _isBST_rec(root, min_val, max_val):
 	if root == None:
 		return True
@@ -148,6 +151,9 @@ def _isBST_rec(root, min_val, max_val):
 def isBST_rec(root):
 	return _isBST_rec(root, -float('inf'), float('inf'))
 
+
+# the logic here is to check if the in-order traversal of the tree returns a sorted array.
+# Major assumption: We assume that the tree will only have unique values, a tree can have only its left child <= root node. 
 def isBST(root):
 	lst = []
 

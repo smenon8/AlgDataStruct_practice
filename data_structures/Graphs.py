@@ -109,7 +109,7 @@ def __main__():
 	b.add_adjacents(c)
 	c.add_adjacents(g,e,f)
 	d.add_adjacents(e)
-	e.add_adjacents(d,i,j)
+	e.add_adjacents(d,i,j,f)
 	# f.add_adjacents()
 	g.add_adjacents(f,a)
 	h.add_adjacents(g,j,k)
@@ -134,9 +134,9 @@ def __main__():
 
 	G.print_graph()
 
-	depth_first_search(G, 0)
+	depth_first_search(G, 4)
 	print()
-	breadth_first_search(G, 0)
+	breadth_first_search(G, 4)
 	print()
 
 	# print(G.get_index_node_list(g))
