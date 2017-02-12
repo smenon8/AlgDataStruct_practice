@@ -64,7 +64,6 @@ def _dfs_helper(G, start_node_idx, visited):
 		idx = G.get_index_node_list(node)
 		
 		if not visited[idx]: # if not visited, the mark visited and start scanning its adjacents
-			visited[idx] = True
 			_dfs_helper(G, idx, visited)
 
 # the possible modification to this code you can make is to actually do the search! 
@@ -89,6 +88,36 @@ def breadth_first_search(G, start_node_idx):
 			if not visited[adj_idx]:
 				visited[adj_idx] = True
 				q.enqueue(adj)
+
+def _detect_cycle(G, node_idx, visited, rec_stack):
+	if not visited[node_idx]:
+		visited[node_idx] = True
+		rec_stack[node_idx] = True
+
+		curr_node = G.node_list[node_idx]
+		for adj in curr_node.adjacents:
+			adj_idx = G.get_index_node_list(adj)
+			if not visited[adj_idx]:
+				return _detect_cycle(G, adj_idx, visited, rec_stack)
+			elif rec_stack[adj_idx]:
+				return True
+
+		rec_stack[node_idx] = False
+
+		return False
+
+def detect_cycle(G):
+	visited = [False] * G.get_num_nodes()
+	rec_stack = [False] * G.get_num_nodes()
+
+	for node in G.node_list:
+		node_idx = G.get_index_node_list(node)
+		has_cycle = _detect_cycle(G, node_idx, visited, rec_stack)
+
+		if has_cycle:
+			return True
+
+	return False
 
 def __main__():
 	G = Graph()
@@ -140,20 +169,42 @@ def __main__():
 	print()
 
 	# print(G.get_index_node_list(g))
-'''
-Graph Structure as follows:
-a -> [b, c]
-b -> [c]
-c -> [g, e]
-d -> [e]
-e -> [d, i, j]
-f -> []
-g -> [f, a]
-h -> [g, j, k]
-i -> [j]
-j -> [k]
-k -> []
-'''
+	'''
+	Graph Structure as follows:
+	a -> [b, c]
+	b -> [c]
+	c -> [g, e]
+	d -> [e]
+	e -> [d, i, j]
+	f -> []
+	g -> [f, a]
+	h -> [g, j, k]
+	i -> [j]
+	j -> [k]
+	k -> []
+	'''
+
+
+	G2 = Graph()
+	a = G_node('a')
+	b = G_node('b')
+	# c = G_node('c')
+	# d = G_node('d')
+
+	a.add_adjacents(b)
+	b.add_adjacents(a)
+	# c.add_adjacents(d)
+	# d.add_adjacents(b)
+
+	G2.add_node(a)
+	G2.add_node(b)
+	# G2.add_node(c)
+	# G2.add_node(d)
+	
+	G2.print_graph()
+
+	print(detect_cycle(G))
+	print(detect_cycle(G2))
 
 if __name__ == "__main__":
 	__main__()

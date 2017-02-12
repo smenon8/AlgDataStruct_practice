@@ -136,6 +136,26 @@ def inOrderTraversalMod(root,lst):
 		lst.append(root.key)
 		inOrderTraversalMod(root.right,lst)
 
+'''
+	Logic: We start with checking if the root node is in the range (None to None) - always true
+	Then we check if the the right child is in the range (root.value to None)
+	For the left child, tghe values are now limited to None to root.value
+'''
+def _is_BST_dups_allowed(root, min, max):
+	if root == None:
+		return True
+
+	if (not min and root.value <= min) or (not max and root.value > max):
+		return False
+
+	if not _is_BST_dups_allowed(root.left, min, root.data) or notis_BST_dups_allowed(root.right, root.data, max):
+		return False
+
+	return True
+
+def is_BST_dups_allowed(root):
+	return _is_BST_dups_allowed(root, None, None)
+
 # Major assumption: We assume that the tree will only have unique values, a tree can have only its left child <= root node. 
 # the logic here is to check recursively, if the sub-trees all have their values within the range. 
 # The root node should have values between the min_val and max_val. You start with -inf and +inf for the root node. 

@@ -408,17 +408,26 @@ def is_balanced(root): # worst case complexity - when the tree is actually balan
 	else:
 		return False
 
-def is_balanced_optimized(root, height):
+def _optimized_height(root):
 	if root == None:
-		return height
+		return 0
 
-	height_l = is_balanced_optimized(root.left, height+1)
-	height_r = is_balanced_optimized(root.right, height+1)
+	l_height = _optimized_height(root.left) 
+	if l_height == -1: # in case, you find a mis-match, you say its an error and the method should return -1
+		return -1
 
-	if abs(height_l - height_r) <= 1:
-		return True
+	r_height = _optimized_height(root.right)
+	if r_height == -1:
+		return -1
+
+	if abs(l_height-r_height) <= 1: # balanced till this point
+		return 1 + max(l_height, r_height)
 	else:
-		return False
+		return -1 # this is the error code we want to propogate all the way to the top, once we get it. 
+
+def is_balanced_optimized(root):
+	return _optimized_height(root) != -1
+	
 ## TEST DRIVER ####################
 
 t1 = Tree()
