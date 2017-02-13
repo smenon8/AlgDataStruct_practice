@@ -427,7 +427,50 @@ def _optimized_height(root):
 
 def is_balanced_optimized(root):
 	return _optimized_height(root) != -1
-	
+
+
+'''
+	The trick in the sort of the problems which is about paths in trees
+	The helper method always updates a static variable
+	The helper method returns the maximum/minimum child of the current node. This is how we keep track of the partial solution.
+'''
+
+def _max_sum_tree_path(root, max_sum):
+	if root == None:
+		return 0
+
+	l_sum = _max_sum_tree_path(root.left, max_sum)
+	r_sum = _max_sum_tree_path(root.right, max_sum)
+
+	max_sum[0] = max(root.value, root.value + l_sum, root.value + r_sum, root.value + l_sum + r_sum, max_sum[0])
+
+	return root.value + max(l_sum, r_sum)
+
+def max_sum_tree_path(root):	
+	max_sum = [-float('inf')]
+	_max_sum_tree_path(root, max_sum)
+	return max_sum[0]
+
+
+def _leaf_to_leaf_max_sum(root, max_sum):
+	if root == None:
+		return 0
+
+	l_sum = _leaf_to_leaf_max_sum(root.left, max_sum)
+	r_sum = _leaf_to_leaf_max_sum(root.right, max_sum)
+
+	if root.left and root.right: # the question clearly says leaf-to-leaf. Change the value only when there is indeed a left and right child
+		max_sum[0] = max(root.value + l_sum + r_sum, max_sum[0])
+
+	return max(l_sum, r_sum) + root.value
+
+def leaf_to_leaf_max_sum(root):
+	max_sum = [-float("inf")]
+
+	_leaf_to_leaf_max_sum(root, max_sum)
+
+	return max_sum[0]
+
 ## TEST DRIVER ####################
 
 t1 = Tree()
