@@ -442,6 +442,13 @@ def _max_sum_tree_path(root, max_sum):
 	l_sum = _max_sum_tree_path(root.left, max_sum)
 	r_sum = _max_sum_tree_path(root.right, max_sum)
 
+	'''
+		There are total 4 cases which could contribute to it being the highest sum path
+		* root itself
+		* root + left sub-child
+		* root + right sub-child
+		* root + left + right sub-children
+	'''
 	max_sum[0] = max(root.value, root.value + l_sum, root.value + r_sum, root.value + l_sum + r_sum, max_sum[0])
 
 	return root.value + max(l_sum, r_sum)
@@ -470,6 +477,35 @@ def leaf_to_leaf_max_sum(root):
 	_leaf_to_leaf_max_sum(root, max_sum)
 
 	return max_sum[0]
+
+def _number_of_paths(root, sum, count_path):
+	if root == None:
+		return 0
+
+	l_sum = _number_of_paths(root.left, sum, count_path)
+	r_sum = _number_of_paths(root.right, sum, count_path)
+
+	if sum == root.value:
+		count_path[0] += 1
+
+	if sum == root.value + l_sum:
+		count_path[0] += 1
+
+	if sum == root.value + r_sum:
+		count_path[0] += 1
+
+	if sum == root.value + l_sum+ r_sum:
+		count_path[0] += 1
+
+	return max(l_sum, r_sum) + root.value
+
+# last problem cracking the coding interview
+def number_of_paths(root, sum):
+	count_path = [0]
+
+	_number_of_paths(root, sum, count_path)
+
+	return count_path[0]
 
 ## TEST DRIVER ####################
 
@@ -530,4 +566,14 @@ inOrderTraversal(newTree.root)
 print("Print ancestors of elements")
 printAncestors(t1.root,5)
 
+t4 = Tree()
 
+t4.root = NodeT(10)
+t4.root.left = NodeT(5)
+t4.root.left.left = NodeT(3)
+t4.root.left.left.left = NodeT(3)
+t4.root.left.left.right = NodeT(-2)
+t4.root.left.right = NodeT(2)
+t4.root.left.right.right = NodeT(1)
+t4.root.right = NodeT(-3)
+t4.root.right.right = NodeT(11)
