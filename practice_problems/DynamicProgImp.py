@@ -76,7 +76,12 @@ def coinChngAllWaysIter(V,C):
 	for i in range(1,len(C)+1):
 		for j in range(1,V+1):
 			if C[i-1] <= j:
-				memo[i][j] = memo[i][j-C[i-1]] + memo[i-1][j]
+				memo[i][j] = memo[i][j-C[i-1]] + memo[i-1][j] 
+				'''
+				The logic is 
+				Num. ways making change for $j using i coins = Num. ways making change for j - c[i] (since you use 1 c[i] coin only j - c[i] remains) using i coins 
+																+ Num. ways making change for $j using only i-1 coins
+				'''
 			else:
 				memo[i][j] = memo[i-1][j]
 
@@ -97,6 +102,10 @@ def minWaysCoinChng(V,C):
 		for i in range(1,V+1):
 			for j in range(len(C)):
 				if i >= C[j]:
+					'''
+					The logic is:
+					min. num. of ways = num. of ways currently existing or 1 + num_ways if you add jth coin. 
+					'''
 					memoTab[i] = min(memoTab[i],memoTab[i-C[j]] + 1)
 		return memoTab[V]
 
@@ -139,6 +148,23 @@ def longest_palindromic_subseq_dp(strng):
 	rev_strng = strng[::-1]
 
 	return LCSIter(strng, rev_strng)
+
+def jumping_kid_memo(n):
+	arr = [0] * (n+1)
+	arr[1] = 1
+	arr[2] = 2
+	arr[3] = 4
+
+	if n < 0:
+		return 0
+	if n <= 3:
+		return arr[n]
+
+	for i in range(4,n+1):
+		arr[i] = arr[i-1] + arr[i-2] + arr[i-3]
+
+	return arr[n]
+
 
 
 
