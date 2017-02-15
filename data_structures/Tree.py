@@ -507,6 +507,7 @@ def number_of_paths(root, sum):
 
 	return count_path[0]
 
+
 ## TEST DRIVER ####################
 
 t1 = Tree()

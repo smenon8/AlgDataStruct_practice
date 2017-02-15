@@ -132,6 +132,25 @@ def zeros_to_end(arr):
 
 	return arr
 
+def zeros_to_end_2(arr):
+	head = 0
+	tail = len(arr) - 1
+
+	while head < tail:
+		if arr[head] == 0:
+			while arr[tail] == 0 and head < tail:
+				tail -= 1
+			if head >= tail:
+				break
+			arr[head] = arr[tail]
+			tail -= 1
+		head += 1
+
+	for i in range(tail, len(arr)):
+		arr[i] = 0
+
+	return arr
+
 
 def find_missing_num(arr, N):
 	xor1 = arr[0]
@@ -143,6 +162,31 @@ def find_missing_num(arr, N):
 		xor2 = xor2 ^ i
 
 	return xor1 ^ xor2
+
+'''
+logic : if 2 numbers are missing, the average of the number is going to be the key to finding those numbers
+ 	of the two numbers one of the number is always going to be smaller than and other number is going to be greater than the avg
+ '''
+def find_2_missing_num(arr, n):
+	nat_sum_n = n*(n+1)/2
+	arr_sum = sum(arr)
+
+	sum_missing = nat_sum_n - arr_sum
+	avg_missing = sum_missing // 2
+
+	nat_sum_1_avg = avg_missing * (avg_missing+1)/2
+	nat_sum_avg_n = nat_sum_n - nat_sum_1_avg
+
+	sum_arr_to_avg = sum_arr_from_avg = 0
+	for i in arr:
+		if i <= avg_missing:
+			sum_arr_to_avg += i
+
+		if i > avg_missing:
+			sum_arr_from_avg += i
+
+	return (nat_sum_1_avg- sum_arr_to_avg, nat_sum_avg_n - sum_arr_from_avg)
+
 
 def two_pair_sum(arr, n):
 	dct = {n - arr[i] : arr[i] for i in range(len(arr))}
@@ -283,6 +327,42 @@ def stock_span_eff(stock_prices):
 		stack.append(i)
 
 	return span
+
+
+# For every element check the difference with the minimum element so far..! 
+def stock_buy_once_sell_once(stock_prices):
+	min_ele_so_far = stock_prices[0]
+	max_diff = 0
+
+	for i in range(1, len(stock_prices)):
+		if stock_prices[i] - min_ele_so_far > max_diff:
+			max_diff = stock_prices[i] - min_ele_so_far
+
+		if min_ele_so_far > stock_prices[i]:
+			min_ele_so_far = stock_prices[i]
+
+	return max_diff
+
+# the logic is to find the point where prices are falling, you sell just before the prices fall. Then reset the entire system.
+def stock_buy_mul_sell_mul(stock_prices):
+	profit_so_far = lcl_min = 0
+	buy_sell_tups = []
+
+	curr = 1
+	while curr < len(stock_prices):
+		if stock_prices[curr] - stock_prices[lcl_min] > profit_so_far:
+			profit_so_far = stock_prices[curr] - stock_prices[lcl_min] 
+		else:
+			if lcl_min != curr-1:
+				buy_sell_tups.append((lcl_min, curr-1))
+			lcl_min = curr
+			profit_so_far = 0
+		curr += 1
+
+	if lcl_min < len(stock_prices) and lcl_min != len(stock_prices)-1:
+		buy_sell_tups.append((lcl_min, len(stock_prices)-1))
+
+	return buy_sell_tups
 
 def moving_average_window(arr, m):
 	if m > len(arr):
