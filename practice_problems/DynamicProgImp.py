@@ -165,7 +165,22 @@ def jumping_kid_memo(n):
 
 	return arr[n]
 
+def magic_index(arr):
+	return _magic_index(arr, 0, len(arr)-1)
 
+def _magic_index(arr, start, end):
+	if start > end: 
+		return -1 # no magic index exists
+
+	mid = (start + end)//2
+	if mid < arr[mid]:
+		end = mid -1
+	elif mid > arr[mid]:
+		start = mid+1
+	else:
+		return mid
+
+	return _magic_index(arr, start, end)
 
 
 s = "GEEKSFORGEEKS"

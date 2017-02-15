@@ -112,7 +112,7 @@ def power_set3(inp_set):
 	for i in range(pwr_set_size):
 		new_set = []
 		for j in range(len(inp_set)):
-			if i & 1 << j : # this is to check if the jth bit is set or not
+			if i & (1 << j) : # this is to check if the jth bit is set or not, 2**j will just have 1 bit set at the jth location
 				new_set.extend([inp_set[j]])
 
 		pwr_set.append(new_set)
@@ -214,6 +214,101 @@ def top_k_ele(arr, k):
 				print(temp)
 				break
 	return temp
+
+'''
+Logic : Until the second number becomes negative keep doubling the first number and halving the second number.
+If the second number becomes odd - then simply add the result with first number
+'''
+def russian_peasant(a, b): # returns a*b, assumes that a and b are both positive
+	result = 0
+
+	while b > 0:
+		if b & 1:
+			result += a
+
+		a  = a << 1
+		b = b >> 1
+
+	return result
+
+'''
+Logic:
+	Logic is smae as counting number of sqaures. Count the number of squares in half the grid and multiply by 2
+	If the halved quantity(smaller) is odd then the answer is exactly twice, if odd then you have to add an additional bigger
+'''
+def _product(smaller, bigger):
+	if smaller == 0: 
+		return 0
+	if smaller == 1:
+		return bigger
+
+	s = smaller >> 1 # dividing by 2, can also write smaller // 2
+	half = _product(s, bigger) # count the number of squares in the half grid
+	if smaller & 1: # smaller is odd
+		return half + half + bigger
+	else:
+		return half + half
+
+
+def product(a,b):
+	smaller = a if a < b else b
+	bigger = a if a > b else b
+
+	return _product(smaller, bigger)
+
+'''
+Logic - Think in terms of histogram:
+Find the tallest tower before the current price - h(i)
+Span = i - h(i)
+
+How to store h(i): stack - keep popping the stack until you find that spike, once you find it span = i - top_of_stack
+Then push the i. 
+Extremely smart! 
+'''
+def stock_span_eff(stock_prices):
+	n = len(stock_prices)
+
+	stack = [0]
+	span = [1] * n
+
+	for i in range(1, n):
+		while len(stack) != 0 and stock_prices[stack[len(stack)-1]] <= stock_prices[i]:
+			stack.pop()
+
+		if len(stack) == 0:
+			span[i] = i+1
+		else:
+			span[i] = i - stack[0]
+
+		stack.append(i)
+
+	return span
+
+def moving_average_window(arr, m):
+	if m > len(arr):
+		return "Not defined"
+
+	head = 0
+	tail = m-1
+	first_result = 0
+	for i in range(head, tail+1):
+		first_result += arr[i]
+
+	result = [first_result]
+
+	curr = 0
+	while tail <= len(arr) -2:
+		tail += 1
+		next_item = result[curr] - arr[head] + arr[tail]
+		result.append(next_item)
+		head += 1
+		curr += 1
+
+	for i in range(len(result)):
+		result[i] = result[i] / m
+
+	return result
+
 
 print(power_set([1,2,3]))
 print(power_set2([1,2,3], []))
