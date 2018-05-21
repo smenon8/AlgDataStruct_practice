@@ -390,6 +390,90 @@ def moving_average_window(arr, m):
 	return result
 
 
+class Point:
+	def __init__(self, x, y):
+		self.x = x
+		self.y = y
+
+class Line:
+	def __init__(self, x1, y1, x2, y2):
+		self.slope = (y2-y1)/(x2-x1)
+		self.intercept = y1 - self.slope * y1
+		self.x1 = x1
+		self.y1 = y1
+		self.x2 = x2
+		self.y2 = y2
+
+
+def get_intersection(line1, line2):
+	if line1.slope == line2.slope2: # parallel lines
+		if line1.intercept == line2.intercept: # same line
+			line_overlaps = check_line_overlap(line1, line2)
+			if line_overlaps:
+				return line_overlaps
+			else:
+				return "No common point between the two lines"
+		else:
+			return "Parallel lines"
+
+	else: # non-parallel lines
+		x = (line2.intercept - line1.intercept) / (line1.slope - line2.slope)
+		y = line1.slope * x + line1.intercept
+
+		P = Point(x, y)
+
+		if point_in_line(p, l1) or point_in_line(p, l2):
+			return p
+		else:
+			return "intersection point lies out of the segment range"
+
+
+def point_in_line(p, line):
+	smaller_x = min(line.x1, line.x2)
+	bigger_x = max(line.x1, line.x2)
+	smaller_y = min(line.y1, line.y2)
+	bigger_y = max(line.y1, line.y2)
+
+	if p.x > smaller_x and p.x < bigger_x and p.y > smaller_y and p.y < bigger_y:
+		return True
+
+	return False
+
+def check_line_overlaps(line1, line2):
+	if point_in_line(Point(line1.x1, line1.y1), line2):
+		return Point(line1.x1, line1.y1)
+
+	if point_in_line(Point(line1.x2, line1.y2), line2):
+		return Point(line1.x2, line1.y2)
+
+	if point_in_line(Point(line2.x1, line2.y1), line1):
+		return Point(line2.x1, line2.y1)
+
+	if point_in_line(Point(line2.x2, line2.y2), line1):
+		return Point(line2.x2, line2.y2)
+
+	return False
+
+
+# the logic is to sort the two arraya to have a sense of what lies ahead of you. 
+def min_difference_2_arrs(arr1, arr2):
+	arr1.sort()
+	arr2.sort()
+
+	ptr1 = ptr2 = 0
+	min_diff = float("inf")
+	while ptr1 < len(arr1) and ptr2 < len(arr2):
+		if min_diff > abs(arr1[ptr1] - arr2[ptr2]):
+			min_diff = abs(arr1[ptr1] - arr2[ptr2])
+
+		if arr1[ptr1] < arr2[ptr2]:
+			ptr1 += 1
+		else:
+			ptr2 += 1
+
+	return min_diff
+
+
 print(power_set([1,2,3]))
 print(power_set2([1,2,3], []))
 print(power_set3([1,2,3]))

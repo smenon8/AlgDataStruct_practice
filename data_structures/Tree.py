@@ -221,8 +221,7 @@ def lvl_ordr_trav_same_line(root):
 			q.append(ele.right)
 	return res
 
-
-
+# a much better solution is possible using two queues
 def printLevelK(root, k):
 	if root == None:
 		return 
