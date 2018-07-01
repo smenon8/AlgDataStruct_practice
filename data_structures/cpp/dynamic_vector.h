@@ -8,11 +8,15 @@ public:    // constructor
     DynVector(int N, int C);
 
     void add(int element);
+    int pop();
     void print();
+    void insertAt(int ele, int pos);
     
 private:
     DynVector();
 
+    void inflate();
+    void deflate();
     void resize();
 
     int maxSize;

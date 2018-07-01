@@ -20,6 +20,18 @@ int main() {
 
     vec->print();
 
+    std::cout << "popped " << vec->pop() << "\n";
+    std::cout << "popped " << vec->pop() << "\n";
+    std::cout << "popped " << vec->pop() << "\n";
+    std::cout << "popped " << vec->pop() << "\n";
+    std::cout << "popped " << vec->pop() << "\n";
+    std::cout << "popped " << vec->pop() << "\n";
+
+    vec->print();
+
+    vec->insertAt(100, 12);
+    vec->print();
+
     return 0;
 
 }
